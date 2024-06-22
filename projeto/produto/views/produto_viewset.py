@@ -5,13 +5,14 @@ from rest_framework.response import Response
 
 from django.db.models import Q
 
-from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from drf_spectacular.utils import extend_schema
 from drf_spectacular.types import OpenApiTypes
 
+from projeto.produto.views.decorators.produto_decorators import create_product_schema, update_product_schema, partial_update_product_schema, retrieve_product_schema, list_product_schema, destroy_product_schema
 
 from projeto.produto.serializers.produto_serializer import ProdutoGetSerializer, ProdutoPostSerializer
 
-@extend_schema(tags=["Produto"])
+
 class ProdutoViewSet(viewsets.ModelViewSet):
     queryset = Produto.objects.all()
     lookup_field = 'slug'
@@ -21,40 +22,11 @@ class ProdutoViewSet(viewsets.ModelViewSet):
             return ProdutoGetSerializer
         return ProdutoPostSerializer
 
-    @extend_schema(
-        summary="Retrieve a product",
-        description="Retrieve a product by slug",
-        responses={200: ProdutoGetSerializer},
-    )
+    @retrieve_product_schema
     def retrieve(self, request, *args, **kwargs):
         return super().retrieve(request, *args, **kwargs)
-
-    @extend_schema(
-        summary="List products or search for a product",
-        description="List all products or search for a product by name, description or category",
-        parameters=[
-            OpenApiParameter(
-                name="search",
-                type=OpenApiTypes.STR,
-                location=OpenApiParameter.QUERY,
-                description="Search for a product by name, description or category",
-                examples=[
-                    OpenApiExample(
-                        name="Search by name",
-                        value="name",
-                    ),
-                    OpenApiExample(
-                        name="Search by description",
-                        value="description",
-                    ),
-                    OpenApiExample(
-                        name="Search by category",
-                        value="category",
-                    ),
-                ],
-            ),
-        ],
-    )
+    
+    @list_product_schema
     def list(self, request, *args, **kwargs):
         search = request.query_params.get('search', None)
         if search:
@@ -66,13 +38,7 @@ class ProdutoViewSet(viewsets.ModelViewSet):
         serializer = ProdutoGetSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
-    
-    @extend_schema(
-        summary="Create a product",
-        description="Create a new product",
-        request=ProdutoPostSerializer,
-        responses={200: ProdutoGetSerializer},
-    )
+    @create_product_schema
     def create(self, request, *args, **kwargs):
         serializer = ProdutoPostSerializer(data=request.data)
         if serializer.is_valid():
@@ -80,13 +46,7 @@ class ProdutoViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-
-    @extend_schema(
-        summary="Update a product",
-        description="Update a product",
-        request=ProdutoPostSerializer,
-        responses={200: ProdutoPostSerializer},
-    )
+    @update_product_schema
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = ProdutoPostSerializer(instance, data=request.data)
@@ -95,20 +55,11 @@ class ProdutoViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    @extend_schema(
-        summary="Partial update a product",
-        description="Partial update a product",
-        request=ProdutoPostSerializer,
-        responses={200: ProdutoPostSerializer},
-    )
+    @partial_update_product_schema
     def partial_update(self, request, *args, **kwargs):
         return super().partial_update(request, *args, **kwargs)
 
-    @extend_schema(
-        summary="Delete a product",
-        description="Delete a product",
-        responses={204: None}
-    )   
+    @destroy_product_schema
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance.delete()
