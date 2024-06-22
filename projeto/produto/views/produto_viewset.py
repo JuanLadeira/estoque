@@ -1,15 +1,9 @@
-
-from projeto.produto.models.produto_model import Produto
+from django.db.models import Q
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
-from django.db.models import Q
-
-from drf_spectacular.utils import extend_schema
-from drf_spectacular.types import OpenApiTypes
-
+from projeto.produto.models.produto_model import Produto
 from projeto.produto.views.decorators.produto_decorators import create_product_schema, update_product_schema, partial_update_product_schema, retrieve_product_schema, list_product_schema, destroy_product_schema
-
 from projeto.produto.serializers.produto_serializer import ProdutoGetSerializer, ProdutoPostSerializer
 
 
