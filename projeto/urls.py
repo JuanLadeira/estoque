@@ -16,11 +16,20 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import include, path
+from rest_framework import routers
+from projeto.produto.views.produto_viewset import ProdutoViewSet
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+
+router = routers.DefaultRouter()
+router.register(r'produtos', ProdutoViewSet)
 
 urlpatterns = [
     path('', include('projeto.core.urls')),
-    # path('produto/', include('projeto.produto.urls')),
-    # path('estoque/', include('projeto.estoque.urls')),
+    path('api/', include(router.urls)),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/docs/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('admin/', admin.site.urls),
     path('logout/', LogoutView.as_view(), name='logout'),
+    # Optional UI:
 ]

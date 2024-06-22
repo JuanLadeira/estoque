@@ -1,5 +1,5 @@
 
-from produto.models.produto_model import Produto
+from projeto.produto.models.produto_model import Produto
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 
@@ -9,11 +9,12 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExampl
 from drf_spectacular.types import OpenApiTypes
 
 
-from produto.serializers.produto_serializer import ProdutoGetSerializer, ProdutoPostSerializer
+from projeto.produto.serializers.produto_serializer import ProdutoGetSerializer, ProdutoPostSerializer
 
 @extend_schema(tags=["Produto"])
 class ProdutoViewSet(viewsets.ModelViewSet):
     queryset = Produto.objects.all()
+    lookup_field = 'slug'
     
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -21,6 +22,15 @@ class ProdutoViewSet(viewsets.ModelViewSet):
         return ProdutoPostSerializer
 
     @extend_schema(
+        summary="Retrieve a product",
+        description="Retrieve a product by slug",
+        responses={200: ProdutoGetSerializer},
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+    @extend_schema(
+        summary="List products or search for a product",
         description="List all products or search for a product by name, description or category",
         parameters=[
             OpenApiParameter(
@@ -58,6 +68,7 @@ class ProdutoViewSet(viewsets.ModelViewSet):
     
     
     @extend_schema(
+        summary="Create a product",
         description="Create a new product",
         request=ProdutoPostSerializer,
         responses={200: ProdutoGetSerializer},
@@ -71,6 +82,7 @@ class ProdutoViewSet(viewsets.ModelViewSet):
     
 
     @extend_schema(
+        summary="Update a product",
         description="Update a product",
         request=ProdutoPostSerializer,
         responses={200: ProdutoPostSerializer},
@@ -83,8 +95,17 @@ class ProdutoViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    @extend_schema(
+        summary="Partial update a product",
+        description="Partial update a product",
+        request=ProdutoPostSerializer,
+        responses={200: ProdutoPostSerializer},
+    )
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
 
     @extend_schema(
+        summary="Delete a product",
         description="Delete a product",
         responses={204: None}
     )   
