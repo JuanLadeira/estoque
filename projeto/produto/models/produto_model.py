@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse_lazy
-
+from projeto.produto.models.categoria_model import Categoria
 
 class Produto(models.Model):
     importado = models.BooleanField(default=False)
@@ -11,7 +11,7 @@ class Produto(models.Model):
     estoque_minimo = models.PositiveIntegerField('estoque mínimo', default=0)
     data = models.DateField(null=True, blank=True)
     categoria = models.ForeignKey(
-        'Categoria',
+        Categoria,
         on_delete=models.SET_NULL,
         null=True,
         blank=True
@@ -23,9 +23,6 @@ class Produto(models.Model):
     def __str__(self):
         return self.produto
 
-    def get_absolute_url(self):
-        return reverse_lazy('produto:produto_detail', kwargs={'pk': self.pk})
-
     def to_dict_json(self):
         return {
             'pk': self.pk,
@@ -33,12 +30,3 @@ class Produto(models.Model):
             'estoque': self.estoque,
         }
 
-
-class Categoria(models.Model):
-    categoria = models.CharField(max_length=100, unique=True)
-
-    class Meta:
-        ordering = ('categoria',)
-
-    def __str__(self):
-        return self.categoria
