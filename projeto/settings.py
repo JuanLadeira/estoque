@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # Apps de terceiros
     'django_extensions',
     'rest_framework',
+    'drf_spectacular',
     'projeto.produto',
     # Minhas apps
 ]
@@ -130,3 +131,17 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 LOGIN_URL = '/admin/login/'
 LOGOUT_REDIRECT_URL = 'core:index'
+
+
+REST_FRAMEWORK = {
+    # YOUR SETTINGS
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Your Project API',
+    'DESCRIPTION': 'Your project description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}

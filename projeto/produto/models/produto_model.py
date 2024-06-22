@@ -14,7 +14,8 @@ class Produto(models.Model):
         Categoria,
         on_delete=models.SET_NULL,
         null=True,
-        blank=True
+        blank=True,
+        related_name='produtos'
     )
 
     class Meta:
