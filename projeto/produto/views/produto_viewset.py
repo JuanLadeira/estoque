@@ -6,7 +6,6 @@ from projeto.produto.models.produto_model import Produto
 from projeto.produto.views.decorators.produto_decorators import create_product_schema, update_product_schema, partial_update_product_schema, retrieve_product_schema, list_product_schema, destroy_product_schema
 from projeto.produto.serializers.produto_serializer import ProdutoGetSerializer, ProdutoPostSerializer
 
-
 class ProdutoViewSet(viewsets.ModelViewSet):
     queryset = Produto.objects.all()
     lookup_field = 'slug'

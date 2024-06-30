@@ -17,18 +17,24 @@ from django.contrib import admin
 from django.contrib.auth.views import LogoutView
 from django.urls import include, path
 from rest_framework import routers
+
 from projeto.produto.views.produto_viewset import ProdutoViewSet
+from projeto.produto.views.categoria_viewset import CategoriaViewSet
+from projeto.estoque.views.estoque_entrada_viewset import EstoqueEntradaViewSet
+from projeto.estoque.views.estoque_saida_viewset import EstoqueSaidaViewSet
+
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 router = routers.DefaultRouter()
 router.register(r'produtos', ProdutoViewSet)
+router.register(r"categorias", CategoriaViewSet)
+router.register(r'estoque-entrada', EstoqueEntradaViewSet)
+router.register(r'estoque-saida', EstoqueSaidaViewSet)
 
 urlpatterns = [
-    path('', include('projeto.core.urls')),
-    path('api/', include(router.urls)),
+    path('', include(router.urls)),
+    path('admin/', admin.site.urls),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/docs/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-    path('admin/', admin.site.urls),
-    # Optional UI:
 ]

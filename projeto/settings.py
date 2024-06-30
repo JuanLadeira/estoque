@@ -43,8 +43,9 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'drf_spectacular',
-    'projeto.produto',
     # Minhas apps
+    'projeto.produto',
+    'projeto.estoque',
 ]
 
 MIDDLEWARE = [
@@ -139,8 +140,8 @@ REST_FRAMEWORK = {
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Your Project API',
-    'DESCRIPTION': 'Your project description',
+    'TITLE': 'Projeto de Estoque',
+    'DESCRIPTION': 'Projeto de API de Estoque.',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS

@@ -53,7 +53,7 @@ def list_product_schema(view_func):
                 name="search",
                 type=OpenApiTypes.STR,
                 location=OpenApiParameter.QUERY,
-                description="Search for a product by name, description or category",
+                description="List or Search for a product by name, description or category",
                 examples=[
                     OpenApiExample(
                         name="Search by name",
