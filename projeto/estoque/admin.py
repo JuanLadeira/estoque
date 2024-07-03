@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django import forms
 
 from projeto.estoque.models.proxys.estoque_entrada import EstoqueEntrada
 from projeto.estoque.models.proxys.estoque_saida import EstoqueSaida
@@ -10,6 +11,7 @@ from projeto.estoque.models.protocolo_entrega_itens_model import ProtocoloEntreg
 class EstoqueItensInline(admin.TabularInline):
     model = EstoqueItens
     extra = 0
+    readonly_fields = ('saldo',)
 
 
 @admin.register(EstoqueEntrada)
@@ -20,6 +22,14 @@ class EstoqueEntradaAdmin(admin.ModelAdmin):
     list_filter = ('funcionario',)
     date_hierarchy = 'created'
 
+    def get_form(self, request, obj=None, **kwargs):
+            form = super(EstoqueEntradaAdmin, self).get_form(request, obj, **kwargs)
+            # Definir o valor padrão para o campo 'movimento' como 'entrada', por exemplo
+            form.base_fields['movimento'].initial = 'e'
+            # Para ocultar o campo 'movimento' do formulário
+            if 'movimento' in form.base_fields:
+                form.base_fields['movimento'].widget = forms.HiddenInput()
+            return form
 
 @admin.register(EstoqueSaida)
 class EstoqueSaidaAdmin(admin.ModelAdmin):
@@ -28,6 +38,16 @@ class EstoqueSaidaAdmin(admin.ModelAdmin):
     search_fields = ('nf',)
     list_filter = ('funcionario',)
     date_hierarchy = 'created'
+
+    def get_form(self, request, obj=None, **kwargs):
+            form = super(EstoqueSaidaAdmin, self).get_form(request, obj, **kwargs)
+            # Definir o valor padrão para o campo 'movimento' como 'entrada', por exemplo
+            form.base_fields['movimento'].initial = 's'
+            # Para ocultar o campo 'movimento' do formulário
+            if 'movimento' in form.base_fields:
+                form.base_fields['movimento'].widget = forms.HiddenInput()
+            return form
+
 
 
 class ProtocoloEntregaItensInline(admin.TabularInline):

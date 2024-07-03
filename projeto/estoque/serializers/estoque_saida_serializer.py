@@ -32,24 +32,3 @@ class EstoqueSaidaPostSerializer(serializers.ModelSerializer):
             EstoqueItens(estoque=estoque_saida, **item_data) for item_data in itens_data
         ])
         return estoque_saida
-    
-    @transaction.atomic
-    def update(self, instance, validated_data):
-        """
-        Recebe uma instância e os dados validados e atualiza uma saída de estoque com os seus itens.
-        Receives an instance and the validated data and updates a stock out with its items.
-        """
-        # remove os itens aninhados dos dados validados e armazena em uma variável
-        itens_data = validated_data.pop('estoque_itens', [])
-
-        # Atualiza a instância com os dados validados, exceto os itens aninhados
-        instance = super().update(instance, validated_data)
-
-        # Deleta os itens aninhados existentes e cria os novos
-        instance.estoque_itens.all().delete()
-
-        # Cria os novos itens
-        EstoqueItens.objects.bulk_create([
-            EstoqueItens(estoque=instance, **item_data) for item_data in itens_data
-        ])
-        return instance

@@ -2,17 +2,6 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExampl
 from drf_spectacular.types import OpenApiTypes
 from projeto.estoque.serializers.estoque_saida_serializer import EstoqueSaidaGetSerializer, EstoqueSaidaPostSerializer
 
-def process_estoque_saida_schema(view_func):
-    decorator = extend_schema(
-        tags=["Estoque - Saida"],
-        summary="Process a stock out",
-        description="Process a stock out, this action will update the stock of the products.",
-        responses={200: {"detail": "Saída no estoque processada com sucesso"},
-                   400: {"detail": "Saída no estoque já processado"},
-        },
-    )
-    return decorator(view_func)
-
 def create_estoque_saida_schema(view_func):
     decorator = extend_schema(
         tags=["Estoque - Saida"],

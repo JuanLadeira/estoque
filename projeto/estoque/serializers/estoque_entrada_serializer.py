@@ -34,21 +34,3 @@ class EstoqueEntradaPostSerializer(serializers.ModelSerializer):
         ])
         return estoque_entrada
     
-    @transaction.atomic
-    def update(self, instance, validated_data):
-        """
-        Recebe uma instância e os dados validados e atualiza uma entrada de estoque com os seus itens.
-        Receives an instance and the validated data and updates a stock entry with its items.
-        """
-        itens_data = validated_data.pop('estoque_itens', [])
-
-        # Atualiza a instância com os dados validados, exceto os itens aninhados
-        instance = super().update(instance, validated_data)
-
-        # Deleta os itens aninhados existentes e cria os novos
-        instance.estoque_itens.all().delete()
-        EstoqueItens.objects.bulk_create([
-            EstoqueItens(estoque=instance, **item_data) for item_data in itens_data
-        ])
-
-        return instance

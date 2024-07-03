@@ -7,9 +7,12 @@ from rest_framework.test import APIClient
 from factory import Faker
 from factory.django import DjangoModelFactory
 
-
+from projeto.core.tests.factories.user_factory import UserFactory
 from projeto.produto.tests.factories.produto_factory import ProdutoFactory
 from projeto.produto.tests.factories.categoria_factory import CategoriaFactory
+from projeto.estoque.tests.factories.estoque_entrada_factory import EstoqueEntradaFactory
+from projeto.estoque.tests.factories.estoque_itens_factory import EstoqueItensFactory
+
 
 django.setup()
 
@@ -19,15 +22,6 @@ from logging import getLogger
 
 User = settings.AUTH_USER_MODEL
 logger = getLogger("django")
-
-
-class UserFactory(DjangoModelFactory):
-    username = Faker('user_name')
-    password = Faker('password')
-    is_superuser = False
-
-    class Meta:
-        model = User
 
 
 @pytest.fixture
@@ -47,3 +41,5 @@ def api_client():
 register(ProdutoFactory)
 register(CategoriaFactory)
 register(UserFactory)
+register(EstoqueEntradaFactory)
+register(EstoqueItensFactory)

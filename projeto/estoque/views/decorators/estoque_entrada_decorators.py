@@ -3,16 +3,6 @@ from drf_spectacular.types import OpenApiTypes
 from projeto.estoque.serializers.estoque_entrada_serializer import EstoqueEntradaGetSerializer, EstoqueEntradaPostSerializer
 
 
-def process_estoque_entrada_schema(view_func):
-    decorator = extend_schema(
-        tags=["Estoque - Entrada"],
-        summary="Process a stock entry",
-        description="Process a stock entry, this action will update the stock of the products.",
-        responses={200: {"detail": "Entrada no estoque processada com sucesso"},
-                   400: {"detail": "Entada no estoque já processado"},
-        },
-    )
-    return decorator(view_func)
 
 def create_estoque_entrada_schema(view_func):
     decorator = extend_schema(
