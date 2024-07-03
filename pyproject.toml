@@ -13,6 +13,23 @@ django-extensions = "^3.2.3"
 pandas = "^2.2.2"
 djangorestframework = "^3.15.2"
 drf-spectacular = "^0.27.2"
+factory-boy = "^3.3.0"
+pytest-factoryboy = "^2.7.0"
+pytest-cov = "^5.0.0"
+pytest-html = "^4.1.1"
+pytest-django = "^4.8.0"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "projeto.settings"
+
+addopts = "--cov=. --cov-report html --cov-config=.coveragerc -v --html=report.html"
+
+python_files = ["test_*.py", "*_test.py", "testing/python/*.py"]
+
+log_cli = true
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)s] %(message)s"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 
 
 [build-system]
