@@ -9,4 +9,3 @@ from projeto.core.models import TimeStampedModel
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-log = getLogger("django")

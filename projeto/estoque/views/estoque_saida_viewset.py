@@ -10,9 +10,6 @@ from projeto.estoque.views.decorators.estoque_saida_decorators import (
     retrieve_estoque_saida_schema,
     create_estoque_saida_schema,
     list_estoque_saida_schema,
-    update_estoque_saida_schema,
-    partial_update_estoque_saida_schema,
-    destroy_estoque_saida_schema,
 )
 
 from projeto.estoque.serializers.estoque_saida_serializer import EstoqueSaidaGetSerializer, EstoqueSaidaPostSerializer
@@ -24,7 +21,8 @@ class EstoqueSaidaViewSet(CreateListRetriveModelViewSet):
         if self.request.method == 'GET':
             return EstoqueSaidaGetSerializer
         return EstoqueSaidaPostSerializer
-  
+    
+
     @retrieve_estoque_saida_schema
     def retrieve(self, request, *args, **kwargs):
         """
@@ -61,42 +59,3 @@ class EstoqueSaidaViewSet(CreateListRetriveModelViewSet):
         Cria uma saída de estoque.
         """
         return super().create(request, *args, **kwargs)
-
-    @update_estoque_saida_schema
-    def update(self, request, *args, **kwargs):
-        """
-        Update a stock out, only works if the stock entry is not processed.
-        Atualiza uma saída de estoque, só funciona se a saida de estoque não estiver sido processada.
-        """
-        if self.get_object().processado:
-            return Response(
-                {'detail': 'Saída do Estoque já processada, não pode ser alterada'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        return super().update(request, *args, **kwargs)
-
-    @partial_update_estoque_saida_schema
-    def partial_update(self, request, *args, **kwargs):
-        """
-        Partial update a stock out, only works if the stock entry is not processed.
-        Atualiza parcialmente uma saída de estoque, só funciona se a saída de estoque não estiver sido processada.
-        """
-        if self.get_object().processado:
-            return Response(
-                {'detail': 'Saída de estoque já processada, não pode ser alterada'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        return super().partial_update(request, *args, **kwargs)
-
-    @destroy_estoque_saida_schema
-    def destroy(self, request, *args, **kwargs):
-        """
-        Destroy a stock entry, only works if the stock entry is not processed.
-        Destroi uma saida de estoque, só funciona se a saida de estoque não estiver sido process
-        """
-        if self.get_object().processado:
-            return Response(
-                {'detail': 'Saída de estoque já processada, não pode ser excluída'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        return super().destroy(request, *args, **kwargs)

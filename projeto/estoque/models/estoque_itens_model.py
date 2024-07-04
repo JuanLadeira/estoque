@@ -13,7 +13,7 @@ class EstoqueItens(models.Model):
     )
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
     quantidade = models.PositiveIntegerField()
-    saldo = models.PositiveIntegerField(blank=True)
+    saldo = models.PositiveIntegerField(blank=True, null=True)
 
     class Meta:
         ordering = ('pk',)
@@ -21,20 +21,19 @@ class EstoqueItens(models.Model):
     def __str__(self):
         return '{} - {} - {}'.format(self.pk, self.estoque.pk, self.produto)
 
-    @transaction.atomic
+
     def atualizar_saldo(self):
-        # Atualiza o saldo do produto
+        """
+        Atualiza o saldo do produto relacionado a este item de estoque.
+        """
         if self.estoque.movimento == 'e':
             saldo = self.produto.estoque + self.quantidade
         else:
             saldo = self.produto.estoque - self.quantidade
             if saldo < 0:
                 raise ValueError(f"Não é possível realizar a saída de {self.produto.nome}. Saldo insuficiente.")
-        return saldo
-
-    def save(self, *args, **kwargs):
-        # Atualiza o saldo do produto
-        self.saldo = self.atualizar_saldo()
-        self.produto.estoque = self.saldo
+        self.saldo = saldo
+        self.produto.estoque = saldo
         self.produto.save()
-        super(EstoqueItens, self).save(*args, **kwargs)
+        self.save()
+  

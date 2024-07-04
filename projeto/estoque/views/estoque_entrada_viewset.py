@@ -10,9 +10,6 @@ from projeto.estoque.views.decorators.estoque_entrada_decorators import (
     retrieve_estoque_entrada_schema,
     create_estoque_entrada_schema,
     list_estoque_entrada_schema,
-    update_estoque_entrada_schema,
-    partial_update_estoque_entrada_schema,
-    destroy_estoque_entrada_schema,
 )
 
 from projeto.estoque.serializers.estoque_entrada_serializer import EstoqueEntradaGetSerializer, EstoqueEntradaPostSerializer
@@ -24,6 +21,7 @@ class EstoqueEntradaViewSet(CreateListRetriveModelViewSet):
         if self.request.method == 'GET':
             return EstoqueEntradaGetSerializer
         return EstoqueEntradaPostSerializer
+    
 
     @retrieve_estoque_entrada_schema
     def retrieve(self, request, *args, **kwargs):

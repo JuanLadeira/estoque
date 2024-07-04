@@ -12,31 +12,6 @@ def create_estoque_saida_schema(view_func):
     )
     return decorator(view_func)
 
-def update_estoque_saida_schema(view_func):
-    decorator = extend_schema(
-        tags=["Estoque - Saida"],
-        summary="Update a stock out",
-        description="Update a stock out",
-        request=EstoqueSaidaPostSerializer,
-        responses={
-            200: EstoqueSaidaPostSerializer,
-            400: {"detail": "Estoque já processado, não pode ser alterado"},
-            },
-    )
-    return decorator(view_func)
-
-def partial_update_estoque_saida_schema(view_func):
-    decorator = extend_schema(
-        tags=["Estoque - Saida"],
-        summary="Partial update a stock out",
-        description="Partial update a estock out",
-        request=EstoqueSaidaPostSerializer,
-        responses={
-            200: EstoqueSaidaPostSerializer,
-            400: {"detail": "Estoque já processado, não pode ser alterado"},
-        },
-    )
-    return decorator(view_func)
 
 def retrieve_estoque_saida_schema(view_func):
     decorator = extend_schema(
@@ -98,15 +73,3 @@ def list_estoque_saida_schema(view_func):
     )
     return decorator(view_func)
 
-
-def destroy_estoque_saida_schema(view_func):
-    decorator = extend_schema(
-        tags=["Estoque - Saida"],
-        summary="Delete an stock output",
-        description="Delete a Estoque by id",
-        responses={ 204: None,
-                    404: {"detail": "Saida de Estoque não encontrada"},
-                    400: {"detail": "Saida de Estoque já processada, não pode ser deletada"}, 
-                   },
-    )
-    return decorator(view_func)

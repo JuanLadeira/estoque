@@ -1,3 +1,4 @@
+from typing import Any
 from django.contrib import admin
 from django import forms
 
@@ -30,6 +31,11 @@ class EstoqueEntradaAdmin(admin.ModelAdmin):
             if 'movimento' in form.base_fields:
                 form.base_fields['movimento'].widget = forms.HiddenInput()
             return form
+    
+    def save_related(self, request: Any, form: Any, formsets: Any, change: Any) -> None:
+        super().save_related(request, form, formsets, change)
+        obj = form.instance
+        obj.processar()
 
 @admin.register(EstoqueSaida)
 class EstoqueSaidaAdmin(admin.ModelAdmin):
@@ -48,6 +54,10 @@ class EstoqueSaidaAdmin(admin.ModelAdmin):
                 form.base_fields['movimento'].widget = forms.HiddenInput()
             return form
 
+    def save_related(self, request: Any, form: Any, formsets: Any, change: Any) -> None:
+        super().save_related(request, form, formsets, change)
+        obj = form.instance
+        obj.processar()
 
 
 class ProtocoloEntregaItensInline(admin.TabularInline):

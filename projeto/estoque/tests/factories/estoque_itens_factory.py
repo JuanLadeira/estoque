@@ -16,4 +16,4 @@ class EstoqueItensFactory(DjangoModelFactory):
 
     quantidade = Faker('random_int', min=1, max=999)
     produto = SubFactory(ProdutoFactory)
-    
+    saldo = 0 

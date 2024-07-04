@@ -25,32 +25,6 @@ def create_estoque_entrada_schema(view_func):
     )
     return decorator(view_func)
 
-def update_estoque_entrada_schema(view_func):
-    decorator = extend_schema(
-        tags=["Estoque - Entrada"],
-        summary="Update a stock entry",
-        description="Update a stock entry",
-        request=EstoqueEntradaPostSerializer,
-        responses={
-            200: EstoqueEntradaPostSerializer,
-            400: {"detail": "Estoque já processado, não pode ser alterado"},
-            },
-    )
-    return decorator(view_func)
-
-def partial_update_estoque_entrada_schema(view_func):
-    decorator = extend_schema(
-        tags=["Estoque - Entrada"],
-        summary="Partial update a stock entry",
-        description="Partial update a estock entry",
-        request=EstoqueEntradaPostSerializer,
-        responses={
-            200: EstoqueEntradaPostSerializer,
-            400: {"detail": "Estoque já processado, não pode ser alterado"},
-        },
-    )
-    return decorator(view_func)
-
 def retrieve_estoque_entrada_schema(view_func):
     decorator = extend_schema(
         tags=["Estoque - Entrada"],
@@ -112,14 +86,3 @@ def list_estoque_entrada_schema(view_func):
     )
     return decorator(view_func)
 
-def destroy_estoque_entrada_schema(view_func):
-    decorator = extend_schema(
-        tags=["Estoque - Entrada"],
-        summary="Delete a Estoque",
-        description="Delete a Estoque by id",
-        responses={ 204: None,
-                    404: {"detail": "Estoque não encontrado"},
-                    400: {"detail": "Estoque já processado, não pode ser deletado"}, 
-                   },
-    )
-    return decorator(view_func)

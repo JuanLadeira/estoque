@@ -5,15 +5,19 @@ from projeto.estoque.models.proxys.estoque_entrada import EstoqueEntrada
 from projeto.estoque.models.estoque_itens_model import EstoqueItens
 from projeto.estoque.serializers.inlines.estoque_itens_inline_serializer import EstoqueItensInlineCreateSerializer, EstoqueItensInlineGetSerializer
 
+from logging import getLogger
+
+log = getLogger("django")
+
 class EstoqueEntradaGetSerializer(serializers.ModelSerializer):
-    itens = EstoqueItensInlineGetSerializer(many=True, source="estoque_itens") 
+    itens = EstoqueItensInlineGetSerializer(many=True, source="estoque_itens", required=True) 
     
     class Meta:
         fields = '__all__'
         model = EstoqueEntrada
 
 class EstoqueEntradaPostSerializer(serializers.ModelSerializer):
-    itens = EstoqueItensInlineCreateSerializer(many=True, source="estoque_itens")
+    itens = EstoqueItensInlineCreateSerializer(many=True, source="estoque_itens", required=True)
    
     class Meta:
         exclude = ['movimento']
@@ -29,8 +33,12 @@ class EstoqueEntradaPostSerializer(serializers.ModelSerializer):
         validated_data['movimento'] = 'e'  # Definindo o movimento
         estoque_entrada = super().create(validated_data)
         
-        EstoqueItens.objects.bulk_create([
+        itens = EstoqueItens.objects.bulk_create([
             EstoqueItens(estoque=estoque_entrada, **item_data) for item_data in itens_data
         ])
+        log.info(f"EstoqueItens criados: {itens}")
+
+        estoque_entrada.processar()
+
         return estoque_entrada
     
