@@ -24,7 +24,7 @@ class EstoqueSaidaPostSerializer(serializers.ModelSerializer):
         Recebe os dados validados e cria uma saida de estoque com os seus itens.
         Receives the validated data and creates a stock out with its items.
         """
-        itens_data = validated_data.pop('itens')
+        itens_data = validated_data.pop('estoque_itens')
         validated_data['movimento'] = 's'  # Definindo o movimento
         estoque_saida = super().create(validated_data)
         

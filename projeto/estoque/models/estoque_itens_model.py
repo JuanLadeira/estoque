@@ -1,9 +1,12 @@
 from django.db import models, transaction
 
-
+from projeto.estoque.exceptions import ProdutoSaldoInsuficienteError
 from projeto.produto.models.produto_model import Produto
 from projeto.estoque.models.estoque_model import Estoque
 
+from logging import getLogger
+
+log = getLogger("test_logger")
 
 class EstoqueItens(models.Model):
     estoque = models.ForeignKey(
@@ -21,7 +24,7 @@ class EstoqueItens(models.Model):
     def __str__(self):
         return '{} - {} - {}'.format(self.pk, self.estoque.pk, self.produto)
 
-
+    @transaction.atomic
     def atualizar_saldo(self):
         """
         Atualiza o saldo do produto relacionado a este item de estoque.
@@ -29,9 +32,10 @@ class EstoqueItens(models.Model):
         if self.estoque.movimento == 'e':
             saldo = self.produto.estoque + self.quantidade
         else:
+            log.info("entrei na subtração do saldo")
             saldo = self.produto.estoque - self.quantidade
             if saldo < 0:
-                raise ValueError(f"Não é possível realizar a saída de {self.produto.nome}. Saldo insuficiente.")
+                raise ProdutoSaldoInsuficienteError(self.produto.produto, self.quantidade)
         self.saldo = saldo
         self.produto.estoque = saldo
         self.produto.save()

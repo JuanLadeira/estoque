@@ -51,7 +51,7 @@ class Estoque(TimeStampedModel):
             self.processado = True
             self.save()
 
-    
+
     def atualizar_estoque_entrada_ou_saida(self):
         """
             Atualiza o estoque de acordo com a entrada ou saida, ou seja, incrementa ou decrementa o saldo dos produtos nessa entrada.
@@ -63,7 +63,10 @@ class Estoque(TimeStampedModel):
             log.info("@atualizar_estoque_entrada_ou_saida - Não há itens para atualizar")
         for item in itens:
             log.info(f"@atualizar_estoque_entrada_ou_saida - Atualizando saldo do produto {item.produto.produto}")
+            saldo = item.produto.estoque
+            log.info(f"Saldo atual do produto {item.produto.produto} é {saldo}")
             item.atualizar_saldo()
-            item.save()
+            saldo = item.produto.estoque
+            log.info(f"Novo saldo do produto {item.produto.produto} é {saldo}")
             log.info(f"Produto {item.produto.produto} atualizado com sucesso")
         log.info("@atualizar_estoque_entrada_ou_saida - finalizando atualização do estoque ")

@@ -5,7 +5,7 @@ from projeto.estoque.serializers.estoque_entrada_serializer import EstoqueEntrad
 class TestEstoqueEntrada:
     def test_estoque_entrada(self, estoque_entrada_factory, estoque_itens_factory, produto_factory, user_factory):
         produto = produto_factory(estoque=0)
-        produto_2 = produto_factory()
+        produto_2 = produto_factory(estoque=0)
         funcionario = user_factory()
         dados_entrada = {
                     'nf': 1,
@@ -30,7 +30,8 @@ class TestEstoqueEntrada:
         serializer = estoque_entrada_serializer_class(data=dados_entrada)
         assert serializer.is_valid()
         estoque_entrada = serializer.save()
-
+        produto_2.refresh_from_db()
+        produto.refresh_from_db()
         itens = estoque_entrada.estoque_itens.all()
 
         assert itens.count() == 2
@@ -45,4 +46,5 @@ class TestEstoqueEntrada:
         assert item_1.quantidade == 1
         assert produto_1.pk == produto.pk
         assert produto_1.estoque == 1
+        assert produto_2.estoque == 2
 

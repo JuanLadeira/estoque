@@ -12,6 +12,8 @@ from projeto.estoque.views.decorators.estoque_saida_decorators import (
     list_estoque_saida_schema,
 )
 
+from projeto.estoque.exceptions import ProdutoSaldoInsuficienteError
+
 from projeto.estoque.serializers.estoque_saida_serializer import EstoqueSaidaGetSerializer, EstoqueSaidaPostSerializer
 
 class EstoqueSaidaViewSet(CreateListRetriveModelViewSet):
@@ -58,4 +60,7 @@ class EstoqueSaidaViewSet(CreateListRetriveModelViewSet):
         Create a stock out.
         Cria uma saída de estoque.
         """
-        return super().create(request, *args, **kwargs)
+        try:
+            return super().create(request, *args, **kwargs)
+        except ProdutoSaldoInsuficienteError as e:
+            return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
