@@ -86,3 +86,9 @@ class ProtocoloEntregaAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'estoque_atualizado')
     list_filter = ('usuario',)
     date_hierarchy = 'created'
+
+    def save_related(self, request: Any, form: Any, formsets: Any, change: Any) -> None:
+        super().save_related(request, form, formsets, change)
+        obj = form.instance
+        user = request.user
+        obj.processar_protocolo(user=user)

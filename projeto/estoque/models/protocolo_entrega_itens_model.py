@@ -6,7 +6,7 @@ class ProtocoloEntregaItens(models.Model):
     protocolo_entrega = models.ForeignKey(
         ProtocoloEntrega,
         on_delete=models.CASCADE,
-        related_name='protocolo_entrega'
+        related_name='protocolo_entrega_itens'
     )
     produto = models.ForeignKey(Produto, on_delete=models.CASCADE)
     quantidade = models.PositiveIntegerField()
