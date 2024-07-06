@@ -1,9 +1,3 @@
-from django.shortcuts import render
-
-
-def index(request):
-    return render(request, 'index.html')
-
 from rest_framework import viewsets, mixins
 
 

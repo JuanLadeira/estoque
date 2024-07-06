@@ -91,4 +91,4 @@ class ProtocoloEntregaAdmin(admin.ModelAdmin):
         super().save_related(request, form, formsets, change)
         obj = form.instance
         user = request.user
-        obj.processar_protocolo(user=user)
+        obj.processar_protocolo(usuario=user)

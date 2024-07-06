@@ -8,8 +8,18 @@ django.setup()
 import string
 import timeit
 from random import choice, randint, random
+from functools import wraps
+from projeto.produto.models.produto_model import Produto
 
-from projeto.produto.models import Produto
+def cronometrize(func):
+    def wrapper(*args, **kwargs):
+        tic = timeit.default_timer()
+        results = func(*args, **kwargs)
+        toc = timeit.default_timer()
+        print(f'Function {func.__name__} took {toc - tic} seconds to execute.')
+        print(f'A função {func.__name__} levou {toc - tic } segundos ')
+        return results
+    return wrapper
 
 
 class Utils:
@@ -21,6 +31,7 @@ class Utils:
 
 class ProdutoClass:
 
+    @cronometrize
     @staticmethod
     def criar_produtos(produtos):
         Produto.objects.all().delete()
@@ -57,11 +68,5 @@ produtos = (
     'Tesoura',
 )
 
-tic = timeit.default_timer()
-
-ProdutoClass.criar_produtos(produtos)
 
 
-toc = timeit.default_timer()
-
-print('Tempo:', toc - tic)

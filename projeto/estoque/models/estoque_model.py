@@ -7,7 +7,7 @@ from django.dispatch import receiver
 
 MOVIMENTO = (
     ('e', 'entrada'),
-    ('s', 'saida'),
+    ('s', 'saída'),
 )
 
 from logging import getLogger
@@ -31,6 +31,13 @@ class Estoque(TimeStampedModel):
         if self.nf:
             return '{} - {} - {}'.format(self.pk, self.nf, self.created.strftime('%d-%m-%Y'))
         return '{} --- {}'.format(self.pk, self.created.strftime('%d-%m-%Y'))
+
+
+    def get_movimento_display(self):
+        movimento = self.movimento
+        if movimento == "e":
+            return MOVIMENTO[0][1].capitalize()
+        return MOVIMENTO[1][1].capitalize()
 
     def nf_formated(self):
         if self.nf:

@@ -1,5 +1,5 @@
 from django.db import models, transaction
-
+from datetime import date
 from projeto.estoque.exceptions import ProdutoSaldoInsuficienteError
 from projeto.produto.models.produto_model import Produto
 from projeto.estoque.models.estoque_model import Estoque
@@ -23,6 +23,16 @@ class EstoqueItens(models.Model):
 
     def __str__(self):
         return '{} - {} - {}'.format(self.pk, self.estoque.pk, self.produto)
+
+
+    def data(self) -> date:
+        return self.estoque.data
+    
+    def movimento(self) -> str:
+        return self.estoque.get_movimento_display()
+    
+    def nf(self)-> int:
+        return self.estoque.nf
 
     @transaction.atomic
     def atualizar_saldo(self):
