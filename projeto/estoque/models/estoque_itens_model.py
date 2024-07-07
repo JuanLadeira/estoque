@@ -20,6 +20,8 @@ class EstoqueItens(models.Model):
 
     class Meta:
         ordering = ('pk',)
+        verbose_name = 'item'
+        verbose_name_plural = 'itens do registro de estoque'
 
     def __str__(self):
         return '{} - {} - {}'.format(self.pk, self.estoque.pk, self.produto)

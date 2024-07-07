@@ -1,7 +1,8 @@
 from typing import Any
-from django.contrib import admin
 from django import forms
-
+from django.contrib import admin
+from unfold.admin import ModelAdmin
+from unfold.admin import TabularInline
 from projeto.estoque.models.proxys.estoque_entrada import EstoqueEntrada
 from projeto.estoque.models.proxys.estoque_saida import EstoqueSaida
 from projeto.estoque.models.estoque_itens_model import EstoqueItens
@@ -9,19 +10,23 @@ from projeto.estoque.models.protocolo_entrega_model import ProtocoloEntrega
 from projeto.estoque.models.protocolo_entrega_itens_model import ProtocoloEntregaItens
 
 
-class EstoqueItensInline(admin.TabularInline):
+
+
+class EstoqueItensInline(TabularInline):
     model = EstoqueItens
     extra = 0
     readonly_fields = ('saldo',)
 
 
 @admin.register(EstoqueEntrada)
-class EstoqueEntradaAdmin(admin.ModelAdmin):
+class EstoqueEntradaAdmin(ModelAdmin):
     inlines = (EstoqueItensInline,)
     list_display = ('__str__', 'nf', 'funcionario',)
     search_fields = ('nf',)
     list_filter = ('funcionario',)
     date_hierarchy = 'created'
+    verbose_name = 'Entrada de estoque'
+    verbose_name_plural = 'Entradas de estoque'
 
     def get_form(self, request, obj=None, **kwargs):
             form = super(EstoqueEntradaAdmin, self).get_form(request, obj, **kwargs)
@@ -53,12 +58,13 @@ class EstoqueEntradaAdmin(admin.ModelAdmin):
         obj.processar()
 
 @admin.register(EstoqueSaida)
-class EstoqueSaidaAdmin(admin.ModelAdmin):
+class EstoqueSaidaAdmin(ModelAdmin):
     inlines = (EstoqueItensInline,)
     list_display = ('__str__', 'nf', 'funcionario',)
     search_fields = ('nf',)
     list_filter = ('funcionario',)
     date_hierarchy = 'created'
+    verbose_name = 'Saída de estoque'
 
     def get_form(self, request, obj=None, **kwargs):
             form = super(EstoqueSaidaAdmin, self).get_form(request, obj, **kwargs)
@@ -75,13 +81,13 @@ class EstoqueSaidaAdmin(admin.ModelAdmin):
         obj.processar()
 
 
-class ProtocoloEntregaItensInline(admin.TabularInline):
+class ProtocoloEntregaItensInline(TabularInline):
     model = ProtocoloEntregaItens
     extra = 0
 
 
 @admin.register(ProtocoloEntrega)
-class ProtocoloEntregaAdmin(admin.ModelAdmin):
+class ProtocoloEntregaAdmin(ModelAdmin):
     inlines = (ProtocoloEntregaItensInline,)
     list_display = ('__str__', 'estoque_atualizado')
     list_filter = ('usuario',)

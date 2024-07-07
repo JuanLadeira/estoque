@@ -6,5 +6,5 @@ class EstoqueEntrada(Estoque):
 
     class Meta:
         proxy = True
-        verbose_name = 'estoque entrada'
-        verbose_name_plural = 'estoque entrada'
+        verbose_name = 'registro de entrada de estoque'
+        verbose_name_plural = 'registros de entrada de estoque'

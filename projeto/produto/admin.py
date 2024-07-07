@@ -12,8 +12,6 @@ from projeto.estoque.models.estoque_itens_model import EstoqueItens
 
 MDATA = datetime.now().strftime('%Y-%m-%d')
 
-
-
 class EstoqueItensInline(admin.TabularInline):
     verbose_name = "Movimentação"
     verbose_name_plural = "Ultimas movimentações"

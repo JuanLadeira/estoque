@@ -10,7 +10,11 @@ User = settings.AUTH_USER_MODEL
 class ProtocoloEntrega(TimeStampedModel):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     estoque_atualizado = models.BooleanField(default=False)
-    
+
+    class Meta:
+        verbose_name = 'protocolo de entrega'
+        verbose_name_plural = 'protocolos de entrega'
+
     def __str__(self):
         return str(self.pk)
 
